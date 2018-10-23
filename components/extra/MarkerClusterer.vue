@@ -70,17 +70,24 @@ export default {
   methods: {
     load () {
       const {BMap, map, gridSize, minClusterSize, maxZoom, styles, averageCenter} = this
-      this.originInstance = new MarkerClusterer(map, {
-        gridSize: gridSize && createSize(BMap, gridSize),
-        maxZoom,
-        minClusterSize: minClusterSize && createSize(BMap, minClusterSize),
-        styles: styles.map(item => {
-          item.size = createSize(BMap, item.size)
-          return item
-        }),
-        isAverageCenter: averageCenter
-      })
+      this.initNum++
       this.$nextTick(() => {
+        this.nextTickNum++
+        if (this.nextTickNum !== this.initNum) {
+          return
+        }
+        this.initNum = 0
+        this.nextTickNum = 0
+        this.originInstance = new MarkerClusterer(map, {
+          gridSize: gridSize && createSize(BMap, gridSize),
+          maxZoom,
+          minClusterSize: minClusterSize || 2,
+          styles: styles.map(item => {
+            item.size = createSize(BMap, item.size)
+            return item
+          }),
+          isAverageCenter: averageCenter
+        })
         const markers = this.$children.map(inst => inst.originInstance).filter(marker => marker instanceof BMap.Marker)
         this.originInstance.addMarkers(markers)
       })
