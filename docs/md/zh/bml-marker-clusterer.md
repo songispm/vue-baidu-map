@@ -76,8 +76,10 @@ export default {
   },
   methods: {
     addMarker () {
-      const position = {lng: Math.random() * 40 + 85, lat: Math.random() * 30 + 21}
-      this.markers.push(position)
+      for(let i = 0; i<1000; i++){
+        const position = {lng: Math.random() * 40 + 85, lat: Math.random() * 30 + 21}
+        this.markers.push(position)    
+      }
     },
     updateMarker ({point}, marker) {
       marker.lng = point.lng
